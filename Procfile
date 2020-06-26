@@ -1,1 +1,1 @@
-web: gunicorn --workers=2 app:app
+web: gunicorn myaccountant.wsgi --log-file -
