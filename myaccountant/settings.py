@@ -25,7 +25,7 @@ SECRET_KEY = '%%0u=k=io6aa%%x%79%^7774n9jtd8dd&l!5+cw9tk(y@kc-(s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["mydistributor.herokuapp.com"]
+ALLOWED_HOSTS = ["mydistributor.herokuapp.com", "127.0.0.1"]
 
 
 # Application definition
@@ -131,5 +131,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
