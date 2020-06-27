@@ -42,7 +42,7 @@ class OrderCreateView(BaseAdminViews):
                 "hsn_code": product.hsn_code,
                 "mrp": product.mrp,
                 "qty": quantity,
-                "gst": 0,
+                "gst": product.tax_value,
                 "disc": 0,
                 "price": price,
                 "amount": product_total

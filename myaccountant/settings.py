@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import environ
+
+env = environ.Env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,17 +83,19 @@ WSGI_APPLICATION = 'myaccountant.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'myaccountantdb',
-        # 'USER': 'postgres',
-        # 'PASSWORD': '',
-        # 'HOST': '127.0.0.1',
-        # 'PORT': '5432',
-    }
-}
+DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# postgres://doahknasgrqnsi:b7b77fb9b0279797501ec998bbe61830b645b0455d1f8d3cb2c38d1d972fd105@ec2-34-197-188-147.compute-1.amazonaws.com:5432/dbd5dg96carfj0
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'myaccountantdb',
+#         # 'USER': 'postgres',
+#         # 'PASSWORD': '',
+#         # 'HOST': '127.0.0.1',
+#         # 'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
