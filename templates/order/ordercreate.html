@@ -11,9 +11,15 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
+
+    function removeRow(e){
+            row = $("#" + e.id);
+            row.remove();
+        }
+
     $(document).ready(function(){
 
-        $(".add-item").click(function(){
+        $(".addlink").click(function(){
             var productId = $("#product-id").val();
             var product = $("#product").val();
             var hsnCode = $("#hsn_code").val();
@@ -23,11 +29,11 @@
                 return;
             }
             var mrp = $("#mrp").val();
-            var markup = "<tr id='" + productId + "'><td><input type='checkbox' name='record'></td>" +
+            var markup = "<tr id='" + productId + "'>" +
                          "<td>" + product + "<input type='hidden' name='product_id' value='" + productId + "'></td>"+
                          "<td>" + hsnCode + "</td>"+
                          "<td>" + qty + "<input type='hidden' name='quantity' value='" + qty + "'></td>"+
-                         "<td>" + mrp + "<input type='hidden' name='mrp' value='" + mrp + "'></td></tr>";
+                         "<td>" + mrp + "<input type='hidden' name='mrp' value='" + mrp + "'></td><td><a id='" + productId + "' class='deletelink' onclick='removeRow(this)'></a></td></tr>";
             $("#order-items tbody").append(markup);
             $("#product").val("");
             $("#product").prop("readonly", false);
@@ -37,7 +43,7 @@
         });
 
         // Find and remove selected table rows
-        $(".remove-item").click(function(){
+        $(".deletelink").click(function(){
             $("table tbody").find('input[name="record"]').each(function(){
                 if($(this).is(":checked")){
                     $(this).parents("tr").remove();
@@ -82,13 +88,38 @@
               });
            }
         });
-        $("#preview-invoice").click(function(e){
-            var markup = "<input id='shop-input' type='hidden' name='shop' value=" +  + ">"
-<!--            $("#order-form").append(markup);-->
+
+        function validateForm(shopId){
+            if (shopId == "0"){
+                return "Please select shop"
+            }
+            if ($("table tbody").find('tr').length <= 0){
+                return "No item is added select shop"
+            };
+            return
+        }
+
+        function submitForm(){
             var shopId = $("#shop").find(":selected").val();
+            var err = validateForm(shopId);
+            if (err != undefined){
+                alert(err);
+                event.preventDefault();
+                return
+            }
             $("#shop-id").val(shopId);
-            $("#order-form").submit();
+        }
+
+        $("#preview-invoice").click(function(e){
+            $("#submit-type").val("preview-invoice");
+            submitForm();
         });
+
+        $("#create-order").click(function(e){
+            $("#submit-type").val("create-order");
+            submitForm();
+        });
+
   });
 
 </script>
@@ -113,13 +144,12 @@
         <h2>Shop Details</h2>
             <div>
                 <label>Select Shop:</label>
-                <select id="shop" name="shop" >
+                <select id="shop" name="shop" required>
                     <option value="0">--Select Shop--</option>
                     {% for each in shops %}
                         <option value="{{each.id}}">{{each.name}} ({{each.beat}})</option>
                     {% endfor %}
                 </select>
-
             </div></br>
 
     <h2>Search Product</h2>
@@ -130,32 +160,34 @@
                 <input type="text" id="hsn_code" name="hsn_code" readonly/>
                 <input type="number" id="quantity" name="quantity" placeholder="Quantity" required/>
                 <input type="number" step="0.01"  id="mrp" name="mrp" placeholder="MRP"/>
-                <button class="add-item" ><img src="/static/admin/img/icon-addlink.svg" alt="Add" title="Add Item" ></button>
+                &nbsp;<a class="addlink" ></a>
             </div>
 
         </div>
 
         </br>
+
+        <div><h3>Added Items</h3></div>
     <form id="order-form" method="post" action="" target="_blank">
         {%csrf_token%}
-    <h3>Added Items</h3>
+        <input id="submit-type" name="submit_type" type="hidden">
         <input id="shop-id" name="shop_id" type="hidden">
         <table id="order-items">
             <thead>
                 <tr>
-                    <th>Select</th>
+
                     <th>Product</th>
                     <th>HSN Code</th>
                     <th>Quantity</th>
                     <th>MRP</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody >
             </tbody>
         </table>
-        <button class="remove-item" value="Remove Item"></button>
         <input type="submit" id="preview-invoice" value="Preview Invoice"/>
-        <input type="submit" value="Create Order"/>
+        <input type="submit" id="create-order" value="Create Order"/>
     </form>
 </div>
 {% endblock %}

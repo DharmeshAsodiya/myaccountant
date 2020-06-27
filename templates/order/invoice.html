@@ -52,7 +52,7 @@
                      <div align="center"><b style="font-size: x-large;">Tax Invoice</b></div>
                     </th>
                  </thead>
-                    <tr><td colspan="5"><b>Invoice No.</b></td><td colspan="4"><b>Invoice Date:</b></td></tr>
+                    <tr><td colspan="5"><b>Invoice No. {{invoice_no}}</b></td><td colspan="4"><b>Invoice Date: {{invoice_date}}</b></td></tr>
                     <tr><td colspan="9"  height="100px"><b>Party Name:</b></br> {{shop_name}}</br> {{shop_address}}</b></td></tr>
                     <tr><th width="5px">S.No</th><th>Product Description</th><th>HSN/SAC</th><th>GST</th><th>MRP</th><th>Quantity</th><th>Rate</th><th>Discount %</th><th>Amount</th></tr>
                     {% for item in item_details %}
