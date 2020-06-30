@@ -25,7 +25,7 @@ class ProductInwardView(BaseAdminViews):
         # mrp = request.POST.get("mrp")
         messages.success(request, "Stock added")
         product = Product.objects.get(name=product_name)
-        product.tax_value = tax_value
+        product.tax_value = tax
         stock, created = Stock.objects.get_or_create(product=product)
         if created:
             stock.created_by = request.user
