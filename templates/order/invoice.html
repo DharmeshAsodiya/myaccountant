@@ -58,7 +58,14 @@
                     {% for item in item_details %}
                     <tr style="font-size:smaller"><td>{{ forloop.counter }}</td><td>{{item.product_desc}}</td><td>{{item.hsn_code}}</td><td>{{item.gst}}%</td><td>{{item.mrp}}</td><td>{{item.qty}}</td><td>{{item.price}}</td><td>{{item.disc}}%</td><td>{{item.amount}}</td></tr>
                     {% endfor %}
-                    <tr><td></td><th>Total</th><td colspan="6"></td><td id="totalval"><b>{{sub_total}}</b></td></tr>
+                    <tr><td height="10px"></td><th></th><td colspan="6"></td><td id="totalval"><b></b></td></tr>
+                    <tr><td></td><th></th><td colspan="6"></td><td id="totalval"><b>{{sub_total}}</b></td></tr>
+                    <tr><td></td><th></th><td colspan="2"></td><td id="totalval" colspan="2"><b>CGST</b></td><td colspan="2"><b>SGST</b></td><td></td></tr>
+                    <tr style="font-size:smaller"><td></td><th></th><td colspan="2"></td><td id="totalval">Rate</td><td>Amount</td><td id="totalval">Rate</td><td id="totalval">Amount</td><td></td></tr>
+                    {% for tax, tax_value in tax_details.items %}
+                        <tr style="font-size:smaller"><td></td><th></th><td colspan="2"></td><td id="totalval">{{tax}}%</td><td>{{tax_value}}</td><td id="totalval">{{tax}}%</td><td id="totalval">{{tax_value}}</td><td>{% widthratio tax_value 1 2.0 %}</td></tr>
+                    {% endfor %}
+                    <tr><td></td><th>Total</th><td colspan="6"></td><td id="totalval"><b>{{final_total}}</b></td></tr>
 
                     <tr><td colspan="9" height="20px" style="border:none;"></td></tr>
 
