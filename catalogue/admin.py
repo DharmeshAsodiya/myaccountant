@@ -11,8 +11,9 @@ class ProductAdmin(BaseAdmin):
 
 @admin.register(Stock)
 class StockAdmin(BaseAdmin):
-    search_fields = ('product',)
-    list_display = ('id', 'product', 'quantity', 'created_by', 'updated_by', 'created_on', 'updated_on')
+    search_fields = ('product__name',)
+    list_display = ('id', 'product', 'quantity', 'created_by', 'updated_by', 'created_on',
+                    'updated_on')
 
     def has_add_permission(self, request):
         return False
@@ -25,8 +26,15 @@ class StockAdmin(BaseAdmin):
 
 @admin.register(StockInwardDetails)
 class StockInwardAdmin(BaseAdmin):
-    search_fields = ('product',)
-    list_display = ('id', 'product', 'quantity', 'cost_price', 'created_on', 'updated_on')
+    search_fields = ('product__name', 'po_number')
+    list_display = ('product', 'quantity', 'cost_price', 'mrp', 'stock_value',
+                    'created_on', 'updated_on')
+
+    actions = ["export_as_csv"]
+    csv_headers = ['Product', 'Quantity', 'Cost Price', 'MRP', 'Stock Value', "Purchase Date"]
+    csv_columns = ['product__name', 'quantity', 'cost_price', 'mrp', 'stock_value',
+                   'created_on__date']
+    csv_file_name = "stock_inward_report"
 
     def has_add_permission(self, request):
         return False

@@ -14,6 +14,15 @@
     $( function() {
         $( "#product" ).autocomplete({
           minLength: 3,
+          select: function (event, ui) {
+            $("#product-id").val(ui.item.pid);
+            $("#product").val(ui.item.value);
+            $("#hsn_code").val(ui.item.hsncode);
+            $("#mrp").val(ui.item.mrp);
+            $("#cp").val(ui.item.cp);
+            $("#tax").val(ui.item.tax);
+            return false;
+          },
           source:function(request, response){
             $.ajax({
                 url: "/admin/product/product-autocomplete/?term=" + $("#product").val(),
@@ -27,7 +36,11 @@
                                 var itemToAdd = {
                                     pid : item.id,
                                     value : item.name,
-                                    label : item.name
+                                    label : item.name,
+                                    hsncode: item.hsn_code,
+                                    mrp: item.mrp,
+                                    cp: item.cost_price,
+                                    tax: item.tax_value
                                 };
                                 results.push(itemToAdd);
                             });
@@ -52,6 +65,7 @@
                 <td>
                     <div class="ui-widget" style="width:300px;">
                         <input id="product" type="text" name="product" placeholder="type here...">
+                        <input type="hidden" id="product-id" name="product_id"/>
                     </div>
                 </td>
             </tr>

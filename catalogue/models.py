@@ -17,8 +17,14 @@ class Stock(BaseModel):
     product = models.ForeignKey(Product, on_delete=True, unique=True)
     quantity = models.IntegerField(default=0)
 
+    def __str__(self):
+        return f"Product:{self.product} Quantity:{self.quantity}"
+
 
 class StockInwardDetails(BaseModel):
     product = models.ForeignKey(Product, on_delete=True)
     quantity = models.IntegerField(default=0)
-    cost_price = models.DecimalField(max_digits=15, decimal_places=2)
+    po_number = models.CharField(max_length=100, null=True, blank=True)
+    cost_price = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    mrp = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    stock_value = models.DecimalField(max_digits=15, decimal_places=2, default=0)
