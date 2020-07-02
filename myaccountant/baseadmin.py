@@ -38,5 +38,6 @@ class BaseAdmin(admin.ModelAdmin):
             del actions['delete_selected']
         if 'export_as_csv' in actions and \
             len(self.csv_columns) <= 0 or len(self.csv_headers) <= 0:
-            raise AssertionError("please add csv_headers & csv_columns if adding export_as_csv as action")
+            pass
+            # raise AssertionError("please add csv_headers & csv_columns if adding export_as_csv as action")
         return actions
