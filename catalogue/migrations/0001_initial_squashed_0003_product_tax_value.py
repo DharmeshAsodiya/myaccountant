@@ -7,7 +7,7 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
-    replaces = [('catalogue', '0001_initial'), ('catalogue', '0002_auto_20200614_1934'), ('catalogue', '0003_product_tax_value')]
+    replaces = [('catalogue', '0001_initial'), ('catalogue', '0002_auto_20200614_1934')]
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

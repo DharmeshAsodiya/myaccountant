@@ -35,6 +35,8 @@
     table td{
         border: solid;
         border-width: thin;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
     }
 </style>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -52,24 +54,24 @@
                      <div align="center"><b style="font-size: x-large;">Tax Invoice</b></div>
                     </th>
                  </thead>
-                    <tr><td colspan="5"><b>Invoice No. {{invoice_no}}</b></td><td colspan="4"><b>Invoice Date: {{invoice_date}}</b></td></tr>
-                    <tr><td colspan="9"  height="100px"><b>Party Name:</b></br> {{shop_name}}</br> {{shop_address}}</b></td></tr>
+                    <tr><td colspan="5" height="10px" style="border-right-width: 0px;"></td><td colspan="4" height="10px" style="border-left-width: 0px;"></td></tr>
+                    <tr><td colspan="5" style="border-right-width: 0px;"><b>Invoice No. {{invoice_no}}</b></td><td colspan="4" style="border-left-width: 0px;"><b>Invoice Date: {{invoice_date}}</b></td></tr>
+                    <tr><td colspan="9"  height="100px" ><b style="font-size: small;">Buyer:</b></br> <b>{{shop_name}}</b></br> {{shop_address}}</b></td></tr>
                     <tr><th width="5px">S.No</th><th>Product Description</th><th>HSN/SAC</th><th>GST</th><th>MRP</th><th>Quantity</th><th>Rate</th><th>Discount %</th><th>Amount</th></tr>
                     {% for item in item_details %}
-                    <tr style="font-size:smaller"><td>{{ forloop.counter }}</td><td>{{item.product_desc}}</td><td>{{item.hsn_code}}</td><td>{{item.gst}}%</td><td>{{item.mrp}}</td><td>{{item.qty}}</td><td>{{item.price}}</td><td>{{item.disc}}%</td><td>{{item.amount}}</td></tr>
+                    <tr style="font-size:smaller"><td style="text-align:center;">{{ forloop.counter }}</td><td>{{item.product_desc}}</td><td>{{item.hsn_code}}</td><td>{{item.gst}}%</td><td>{{item.mrp}}</td><td>{{item.qty}}</td><td>{{item.price}}</td><td>{{item.disc}}%</td><td style="text-align:right;">{{item.amount}}</td></tr>
                     {% endfor %}
-                    <tr><td height="10px"></td><th></th><td colspan="6"></td><td id="totalval"><b></b></td></tr>
-                    <tr><td></td><th></th><td colspan="6"></td><td id="totalval"><b>{{sub_total}}</b></td></tr>
-                    <tr><td></td><th></th><td colspan="2"></td><td id="totalval" colspan="2"><b>CGST</b></td><td colspan="2"><b>SGST</b></td><td></td></tr>
-                    <tr style="font-size:smaller"><td></td><th></th><td colspan="2"></td><td id="totalval">Rate</td><td>Amount</td><td id="totalval">Rate</td><td id="totalval">Amount</td><td></td></tr>
+                    <tr><th colspan="8" style="border-bottom-width: 0px;"></th><th style="border-bottom-width: 0px;text-align:right;"><b>{{sub_total}}</b></th></tr>
+                    <tr><td colspan="4" style="border-top-width:0px;"></td><th colspan="2"><b>CGST</b></th><th colspan="2"><b>SGST</b></th><td></td></tr>
+                    <tr style="font-size:smaller"><td colspan="4"></td><td>Rate</td><td>Amount</td><td>Rate</td><td>Amount</td><td></td></tr>
                     {% for tax, tax_value in tax_details.items %}
-                        <tr style="font-size:smaller"><td></td><th></th><td colspan="2"></td><td id="totalval">{{tax}}%</td><td>{{tax_value}}</td><td id="totalval">{{tax}}%</td><td id="totalval">{{tax_value}}</td><td>{% widthratio tax_value 1 2.0 %}</td></tr>
+                    <tr style="font-size:smaller"><td colspan="4"></td><td>{{tax}}%</td><td>{{tax_value.0}}</td><td>{{tax}}%</td><td id="totalval">{{tax_value.0}}</td><td style="text-align:right;"><b>{{tax_value.1}}</b></td></tr>
                     {% endfor %}
-                    <tr><td></td><th>Total</th><td colspan="6"></td><td id="totalval"><b>{{final_total}}</b></td></tr>
+                    <tr><th></th><th><b>Total</b></th><th colspan="6"></th><th style="text-align:right;"><b>{{final_total}}</b></th></tr>
 
                     <tr><td colspan="9" height="20px" style="border:none;"></td></tr>
 
-                    <tr><th height="50px" colspan="9" style="text-align:left;font-style: italic;">Total Amount (INR - In words): {{total_in_words}} Rupees</th></tr>
+                    <tr><th height="50px" colspan="9" style="text-align:left;font-style: italic;">Total Amount (INR - In words): {{total_in_words.0|title}} Rupee And {{total_in_words.1|title}} Paise</th></tr>
                     <tr><th colspan="8" height="10px"  style="border:none;"></th><th style="vertical-align:top;font-style: italic; border:none;"></th></tr>
                     <tr><th colspan="8" height="100px"  style="border:none;"></th><th style="vertical-align:top;font-style: italic; border:none;">Maa Asha Sales</th></tr>
                     <tr><th colspan="8"  style="border:none;"></th><th style="vertical-align:top;font-style: italic; border:none;">Authorized Signatory</th></tr>

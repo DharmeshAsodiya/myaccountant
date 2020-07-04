@@ -1,4 +1,5 @@
 from myaccountant.basemodels import BaseModel
+from django.contrib.postgres.fields import JSONField
 from client.models import Shop
 from catalogue.models import Product
 from django.db import models
@@ -7,6 +8,9 @@ from django.db import models
 class Order(BaseModel):
     order_no = models.CharField(max_length=100)
     customer = models.ForeignKey(Shop, on_delete=True)
+
+    def __str__(self):
+        return f"{self.id}"
 
 
 class OrderItem(BaseModel):
@@ -20,6 +24,7 @@ class Invoice(BaseModel):
     order = models.ForeignKey(Order, on_delete=True)
     sub_total = models.DecimalField(max_digits=15, decimal_places=2)
     outstanding_amount = models.DecimalField(max_digits=15, decimal_places=2)
+    invoice_details = JSONField(null=True)
 
 
 class CreditNote(BaseModel):

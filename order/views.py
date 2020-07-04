@@ -1,9 +1,10 @@
-
+import json
 from decimal import Decimal
 from myaccountant.baseviews import BaseAdminViews
-
+from django.views import View
 from client.models import Shop
 from .services.ordercreator import OrderCreator
+from .models import Invoice
 
 
 class OrderCreateView(BaseAdminViews):
@@ -26,6 +27,13 @@ class OrderCreateView(BaseAdminViews):
         if request_type == "create-order":
             order_service.create_order()
         context_data = order_service.get_invoice_data()
-        print(context_data)
         self.template_name = "order/invoice.html"
         return self.render_to_response(context_data)
+
+
+class InvoiceView(BaseAdminViews):
+
+    def get(self, request):
+        invoice = Invoice.objects.get(id=request.GET.get('id'))
+        self.template_name = "order/invoice.html"
+        return self.render_to_response(json.loads(invoice.invoice_details))
