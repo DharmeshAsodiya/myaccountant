@@ -23,6 +23,7 @@ class OrderCreator(object):
         self.product_map = None
         self.tax_details = None
         self.tax_total = Decimal(0)
+        self.total_payable = Decimal(0)
         self.invoice = None
         self._build_order_details(shop_id, product_list, price_list, quantity_list)
 
@@ -66,7 +67,8 @@ class OrderCreator(object):
     def get_invoice_data(self):
         inf = inflect.engine()
         final_total = self.order_total + self.tax_total
-        total_in_words = inf.number_to_words(final_total).split("point")
+        self.total_payable = Decimal(round(final_total, 0)) - final_total
+        total_in_words = inf.number_to_words(round(final_total, 0)).split("point")[0]
         invoice_details = {"invoice_no": self.order.id if self.order else "NA",
                            "invoice_date": datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%Y"),
                            "shop_name": self.shop.name,
@@ -74,6 +76,8 @@ class OrderCreator(object):
                            "item_details": self.item_details,
                            "sub_total": decimal_to_price(self.order_total),
                            "final_total": decimal_to_price(final_total),
+                           "roundup_total": decimal_to_price(round(final_total, 0)),
+                           "roundup_diff": decimal_to_price(Decimal(round(final_total, 0)) - final_total),
                            "tax_details": self.tax_details,
                            "total_in_words": total_in_words
                           }
@@ -98,5 +102,5 @@ class OrderCreator(object):
             stock.quantity -= quantity
             stock.save()
         self.invoice = Invoice.objects.create(order=self.order,
-                                              sub_total=self.order_total,
-                                              outstanding_amount=self.order_total)
+                                              sub_total=self.total_payable,
+                                              outstanding_amount=self.total_payable)

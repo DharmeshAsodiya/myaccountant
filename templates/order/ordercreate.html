@@ -24,8 +24,8 @@
             var product = $("#product").val();
             var hsnCode = $("#hsn_code").val();
             var qty = $("#quantity").val();
-            if (qty === ""){
-                alert("Please enter Qty")
+            if(qty === "" || qty === "0"){
+                alert("Please enter valid Quantity")
                 return;
             }
             var mrp = $("#mrp").val();
@@ -58,6 +58,7 @@
             $("#product").val(ui.item.value);
             $("#product").prop("readonly", true);
             $("#hsn_code").val(ui.item.hsncode);
+            $("#quantity").val(ui.item.qty);
             $("#mrp").val(ui.item.mrp);
             return false;
           },
@@ -76,7 +77,8 @@
                                     value : item.name,
                                     label : item.name,
                                     hsncode: item.hsn_code,
-                                    mrp: item.mrp
+                                    mrp: item.mrp,
+                                    qty: item.stock__quantity
                                 };
                                 results.push(itemToAdd);
                             });

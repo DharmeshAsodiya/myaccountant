@@ -17,7 +17,6 @@ class OrderCreateView(BaseAdminViews):
         return context_data
 
     def post(self, request):
-        print(request.POST)
         shop_id = request.POST.get("shop_id")
         product_list = request.POST.getlist("product_id")
         quantity_list = request.POST.getlist("quantity")

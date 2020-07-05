@@ -22,6 +22,10 @@ class ProductInwardView(BaseAdminViews):
         cost_price = request.POST.get("cp")
         tax = request.POST.get("tax")
         mrp = request.POST.get("mrp")
+        if not product_id:
+            messages.error(request, "Product not found in system with name: %s" % product_name)
+            return self.render_to_response(self.get_context_data())
+
         product = Product.objects.get(id=product_id)
         product.tax_value = tax
         stock, created = Stock.objects.get_or_create(product=product)
@@ -44,7 +48,8 @@ class ProductAutoSuggest(BaseAdminViews):
         term = request.GET.get('term')
         ret_dict = {'data': []}
         products = list(Product.objects.filter(name__icontains=term)
-                        .values('id', 'name', "hsn_code", "mrp", "cost_price", "tax_value"))
+                        .values('id', 'name', "hsn_code", "mrp", "cost_price", "tax_value",
+                                "stock__quantity"))
         ret_dict['data'].extend(products)
         ret_dict['success'] = True
         return JsonResponse(ret_dict)
