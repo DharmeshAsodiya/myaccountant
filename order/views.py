@@ -2,9 +2,11 @@ import json
 from decimal import Decimal
 from myaccountant.baseviews import BaseAdminViews
 from django.views import View
+from django.contrib import messages
 from client.models import Shop
 from .services.ordercreator import OrderCreator
 from .models import Invoice
+from django.utils.safestring import mark_safe
 
 
 class OrderCreateView(BaseAdminViews):
@@ -24,10 +26,17 @@ class OrderCreateView(BaseAdminViews):
         request_type = request.POST.get("submit_type")
         order_service = OrderCreator(shop_id, product_list, quantity_list, price_list)
         if request_type == "create-order":
-            order_service.create_order()
-        context_data = order_service.get_invoice_data()
+            invoice_id = order_service.create_order()
+            messages.success(request,
+                             mark_safe("Order created successfully, "
+                                       "<a href=/admin/order/display-invoice/?id=%s>"
+                                       "Download invoice</a>" % invoice_id))
+            return self.render_to_response(self.get_context_data())
+
+        # preview invoice response
+        invoice_data = order_service.get_invoice_data()
         self.template_name = "order/invoice.html"
-        return self.render_to_response(context_data)
+        return self.render_to_response(invoice_data)
 
 
 class InvoiceView(BaseAdminViews):

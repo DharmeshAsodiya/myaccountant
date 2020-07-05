@@ -81,13 +81,8 @@ class OrderCreator(object):
                            "tax_details": self.tax_details,
                            "total_in_words": total_in_words
                           }
-        self.update_invoice_details_to_db(invoice_details)
-        return invoice_details
 
-    def update_invoice_details_to_db(self, details):
-        if self.invoice:
-            self.invoice.invoice_details = json.dumps(details)
-            self.invoice.save()
+        return invoice_details
 
     def create_order(self):
         self.order = Order.objects.create(customer=self.shop, order_no=self.shop.beat)
@@ -101,6 +96,9 @@ class OrderCreator(object):
             stock = Stock.objects.get(product=product)
             stock.quantity -= quantity
             stock.save()
+        details = self.get_invoice_data()
         self.invoice = Invoice.objects.create(order=self.order,
                                               sub_total=self.total_payable,
-                                              outstanding_amount=self.total_payable)
+                                              outstanding_amount=self.total_payable,
+                                              invoice_details=json.dumps(details))
+        return self.invoice.id

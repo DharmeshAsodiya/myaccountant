@@ -115,11 +115,13 @@
         $("#preview-invoice").click(function(e){
             $("#submit-type").val("preview-invoice");
             submitForm();
+            $("#order-form").attr("target","_blank");
         });
 
         $("#create-order").click(function(e){
             $("#submit-type").val("create-order");
             submitForm();
+            $("#order-form").attr("target", "");
         });
 
   });
@@ -170,7 +172,7 @@
         </br>
 
         <div><h3>Added Items</h3></div>
-    <form id="order-form" method="post" action="" target="_blank">
+    <form id="order-form" method="post" action="">
         {%csrf_token%}
         <input id="submit-type" name="submit_type" type="hidden">
         <input id="shop-id" name="shop_id" type="hidden">
