@@ -3,6 +3,7 @@ from myaccountant.baseadmin import BaseAdmin
 from .models import Order, Invoice, OrderItem
 from django.utils.html import format_html
 
+
 @admin.register(OrderItem)
 class OrderItemAdmin(BaseAdmin):
 
