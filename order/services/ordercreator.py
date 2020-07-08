@@ -67,7 +67,7 @@ class OrderCreator(object):
     def get_invoice_data(self):
         inf = inflect.engine()
         final_total = self.order_total + self.tax_total
-        self.total_payable = Decimal(round(final_total, 0)) - final_total
+        self.total_payable = Decimal(round(final_total, 0))
         total_in_words = inf.number_to_words(round(final_total, 0)).split("point")[0]
         invoice_details = {"invoice_no": self.order.id if self.order else "NA",
                            "invoice_date": datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%Y"),

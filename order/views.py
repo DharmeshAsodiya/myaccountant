@@ -41,7 +41,8 @@ class OrderCreateView(BaseAdminViews):
 
 class InvoiceView(BaseAdminViews):
 
+    template_name = "order/invoice.html"
+
     def get(self, request):
         invoice = Invoice.objects.get(id=request.GET.get('id'))
-        self.template_name = "order/invoice.html"
         return self.render_to_response(json.loads(invoice.invoice_details))
