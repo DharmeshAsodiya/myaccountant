@@ -27,6 +27,7 @@ class StockAdmin(BaseAdmin):
 @admin.register(StockInwardDetails)
 class StockInwardAdmin(BaseAdmin):
     search_fields = ('product__name', 'po_number')
+    list_filter = ('created_on',)
     list_display = ('product', 'quantity', 'cost_price', 'mrp', 'stock_value',
                     'created_on', 'updated_on')
 
