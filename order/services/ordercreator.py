@@ -73,6 +73,7 @@ class OrderCreator(object):
                            "invoice_date": datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%Y"),
                            "shop_name": self.shop.name,
                            "shop_address": self.shop.address,
+                           "shop_gst": f"GSTIN - {self.shop.gst}" if self.shop.gst else "",
                            "item_details": self.item_details,
                            "sub_total": decimal_to_price(self.order_total),
                            "final_total": decimal_to_price(final_total),
