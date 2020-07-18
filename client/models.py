@@ -9,6 +9,7 @@ class Shop(BaseModel):
     email = models.EmailField(max_length=100, default="", null=True, blank=True)
     address = models.TextField(max_length=1000)
     beat = models.CharField(max_length=200)
+    gst = models.CharField(max_length=200, null=True, blank=True, verbose_name="GST Number")
 
     def __str__(self):
         return f"{self.name}({self.beat})"
