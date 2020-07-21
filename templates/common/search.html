@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% block breadcrumbs %}
+   <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Home</a> >
+        <a href="{% url 'admin:index' %}{{ app }}">Finance</a> >
+        {{ view_name }} Search View
+    </div>
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+    $( function() {
+        $( "#id_client_name" ).autocomplete({
+          minLength: 3,
+          select: function (event, ui) {
+            $("#id_client").val(ui.item.pid);
+            $("#id_client_name").val(ui.item.value);
+            return false;
+          },
+          source:function(request, response){
+            $.ajax({
+                url: "/admin/client/shop-autocomplete/?term=" + $("#id_client_name").val(),
+                type: "GET",
+                success: function (res) {
+                    if (res.success){
+                        if (res.data){
+                            var results = [];
+                            var data = res.data;
+                            $.each(data, function(i, item) {
+                                var itemToAdd = {
+                                    pid : item.id,
+                                    value : item.name + " (" + item.beat + ")"
+                                };
+                                results.push(itemToAdd);
+                            });
+                            response(results);
+                        }
+                    }
+
+                }
+              });
+           }
+        });
+  } );
+
+</script>
+<div id="content-main">
+    <form id="search-form" method="post" >
+        {%csrf_token%}
+        <table>
+            {{form}}
+            <tr>
+                <td><input type="submit" value="Search"/></td>
+            </tr>
+        </table>
+
+
+    </form>
+</div>
+{% endblock %}

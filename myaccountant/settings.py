@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 CUSTOM_APPS = [
     'client',
     'catalogue',
-    'order.apps.OrderConfig'
+    'order.apps.OrderConfig',
+    'finance.apps.FinanceConfig'
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + CUSTOM_APPS

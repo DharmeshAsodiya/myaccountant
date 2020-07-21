@@ -7,9 +7,11 @@
         <h2>{{ app.name }} {% trans 'Operations' %}</h2>
             <ul class="actionlist">
                 <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
-                    <a href="order-create/">Create Order</a>
+                    <a href="supplier-payment/">Supplier Payment</a>
                 </li>
-
+                <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                    <a href="shop-payment/">Receive Shop Payment</a>
+                </li>
             </ul>
         {% endfor %}
     </div>

@@ -4,7 +4,7 @@
    <div class="breadcrumbs">
         <a href="{% url 'admin:index' %}">Home</a> >
         <a href="{% url 'admin:index' %}finance">Finance</a> >
-        Supplier Payment
+        Shop Payment
     </div>
 {% endblock %}
 {% block content %}
@@ -22,7 +22,7 @@
           },
           source:function(request, response){
             $.ajax({
-                url: "/admin/product/supplier-autocomplete/?term=" + $("#id_client_name").val(),
+                url: "/admin/client/shop-autocomplete/?term=" + $("#id_client_name").val(),
                 type: "GET",
                 success: function (res) {
                     if (res.success){
@@ -32,7 +32,7 @@
                             $.each(data, function(i, item) {
                                 var itemToAdd = {
                                     pid : item.id,
-                                    value : item.name
+                                    value : item.name + " (" + item.beat + ")"
                                 };
                                 results.push(itemToAdd);
                             });

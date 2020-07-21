@@ -8,6 +8,9 @@ from django.db import models
 class Order(BaseModel):
     order_no = models.CharField(max_length=100)
     customer = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    sub_total = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    outstanding_amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    invoice_details = JSONField(null=True)
 
     def __str__(self):
         return f"{self.id}"
@@ -26,9 +29,3 @@ class Invoice(BaseModel):
     outstanding_amount = models.DecimalField(max_digits=15, decimal_places=2)
     invoice_details = JSONField(null=True)
 
-
-class CreditNote(BaseModel):
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    paid_amount = models.DecimalField(max_digits=15, decimal_places=2)
-    paid_at = models.DateTimeField(auto_now=True)
-    payment_mode = models.CharField(max_length=20, default="Cash")
