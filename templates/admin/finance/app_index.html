@@ -1,0 +1,18 @@
+{% extends "admin/app_index.html" %}
+{% load i18n static %}
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        {% for app in app_list %}
+        <h2>{{ app.name }} {% trans 'Operations' %}</h2>
+            <ul class="actionlist">
+                <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                    <a href="order-create/">Create Order</a>
+                </li>
+
+            </ul>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
