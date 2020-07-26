@@ -6,4 +6,4 @@ from .models import Shop
 @admin.register(Shop)
 class ShopAdmin(BaseAdmin):
 
-    list_display = ('id', "name", "address", "beat", "contact_no", "gst")
+    list_display = ('id', "name", "address", "beat", "contact_no", "gst", "outstanding_balance")

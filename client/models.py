@@ -10,6 +10,7 @@ class Shop(BaseModel):
     address = models.TextField(max_length=1000)
     beat = models.CharField(max_length=200)
     gst = models.CharField(max_length=200, null=True, blank=True, verbose_name="GST Number")
+    outstanding_balance = models.DecimalField(max_digits=15, decimal_places=2, default=0)
 
     def __str__(self):
         return f"{self.name}({self.beat})"

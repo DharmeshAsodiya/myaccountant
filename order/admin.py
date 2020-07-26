@@ -26,7 +26,7 @@ class OrderItemAdmin(BaseAdmin):
 @admin.register(Order)
 class OrderAdmin(BaseAdmin):
 
-    list_display = ('id', "customer")
+    list_display = ('id', "customer", "sub_total", "outstanding_amount")
     
     def has_add_permission(self, request):
         return False
