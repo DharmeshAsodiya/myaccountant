@@ -5,7 +5,7 @@ from django.views import View
 from django.contrib import messages
 from client.models import Shop
 from .services.ordercreator import OrderCreator
-from .models import Invoice
+from .models import Order
 from django.utils.safestring import mark_safe
 
 
@@ -26,11 +26,11 @@ class OrderCreateView(BaseAdminViews):
         request_type = request.POST.get("submit_type")
         order_service = OrderCreator(shop_id, product_list, quantity_list, price_list)
         if request_type == "create-order":
-            invoice_id = order_service.create_order()
+            order_id = order_service.create_order()
             messages.success(request,
                              mark_safe("Order created successfully, "
                                        "<a href=/admin/order/display-invoice/?id=%s>"
-                                       "Download invoice</a>" % invoice_id))
+                                       "Download invoice</a>" % order_id))
             return self.render_to_response(self.get_context_data())
 
         # preview invoice response
@@ -43,6 +43,6 @@ class InvoiceView(BaseAdminViews):
 
     template_name = "order/invoice.html"
 
-    def get(self, request):
-        invoice = Invoice.objects.get(id=request.GET.get('id'))
-        return self.render_to_response(json.loads(invoice.invoice_details))
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.get(id=request.GET.get('id'))
+        return self.render_to_response(json.loads(order.invoice_details))

@@ -26,19 +26,7 @@ class OrderItemAdmin(BaseAdmin):
 @admin.register(Order)
 class OrderAdmin(BaseAdmin):
 
-    list_display = ('id', "customer", "sub_total", "outstanding_amount")
-    
-    def has_add_permission(self, request):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
-
-
-@admin.register(Invoice)
-class InvoiceAdmin(BaseAdmin):
-
-    list_display = ('order', "sub_total", "outstanding_amount", "invoice_link")
+    list_display = ('id', "customer", "sub_total", "outstanding_amount", "invoice_link")
 
     def invoice_link(self, obj):
         if not obj.invoice_details:
@@ -46,9 +34,10 @@ class InvoiceAdmin(BaseAdmin):
         return format_html(f'<a href="/admin/order/display-invoice/?id={obj.id}" target="_blank">Invoice Statement</a>')
 
     invoice_link.short_description = "Invoice"
-
+    
     def has_add_permission(self, request):
         return False
 
     def has_change_permission(self, request, obj=None):
         return False
+

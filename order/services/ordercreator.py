@@ -102,8 +102,8 @@ class OrderCreator(object):
         self.order.sub_total = self.total_payable
         self.order.outstanding_amount = self.total_payable
         self.order.save()
-        self.invoice = Invoice.objects.create(order=self.order,
-                                              sub_total=self.total_payable,
-                                              outstanding_amount=self.total_payable,
-                                              invoice_details=json.dumps(details))
-        return self.invoice.id
+        # self.invoice = Invoice.objects.create(order=self.order,
+        #                                       sub_total=self.total_payable,
+        #                                       outstanding_amount=self.total_payable,
+        #                                       invoice_details=json.dumps(details))
+        return self.order.id
