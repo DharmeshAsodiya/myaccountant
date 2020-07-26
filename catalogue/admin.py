@@ -1,5 +1,6 @@
 from myaccountant.baseadmin import BaseAdmin
 from django.contrib import admin
+from .forms import SupplierAddForms
 from .models import *
 
 
@@ -7,6 +8,13 @@ from .models import *
 class ProductAdmin(BaseAdmin):
     search_fields = ('hsn_code', 'name')
     list_display = ('id', 'name', 'hsn_code', 'cost_price', 'mrp')
+
+
+@admin.register(Supplier)
+class SupplierAdmin(BaseAdmin):
+    search_fields = ('name',)
+    list_display = ('id', 'name', 'contact_no', 'gst', 'outstanding_balance')
+    form = SupplierAddForms
 
 
 @admin.register(Stock)
@@ -27,8 +35,8 @@ class StockAdmin(BaseAdmin):
 @admin.register(StockInwardDetails)
 class StockInwardAdmin(BaseAdmin):
     search_fields = ('product__name', 'po_number')
-    list_filter = ('created_on',)
-    list_display = ('product', 'quantity', 'cost_price', 'mrp', 'stock_value',
+    list_filter = ('supplier', 'type', 'created_on')
+    list_display = ('product', 'supplier', 'po_number', 'type', 'quantity', 'cost_price', 'mrp', 'stock_value',
                     'created_on', 'updated_on')
 
     actions = ["export_as_csv"]

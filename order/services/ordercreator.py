@@ -98,6 +98,10 @@ class OrderCreator(object):
             stock.quantity -= quantity
             stock.save()
         details = self.get_invoice_data()
+        self.order.invoice_details = json.dumps(details)
+        self.order.sub_total = self.total_payable
+        self.order.outstanding_amount = self.total_payable
+        self.order.save()
         self.invoice = Invoice.objects.create(order=self.order,
                                               sub_total=self.total_payable,
                                               outstanding_amount=self.total_payable,

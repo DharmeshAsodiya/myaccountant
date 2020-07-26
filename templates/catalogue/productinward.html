@@ -2,8 +2,9 @@
 {% load i18n static %}
 {% block breadcrumbs %}
    <div class="breadcrumbs">
-        <a href="{% url 'admin:index' %}">Home</a>
-         > Product Inward
+        <a href="{% url 'admin:index' %}">Home</a> >
+        <a href="{% url 'admin:index' %}catalogue">Catalogue</a> >
+        Product Inward
     </div>
 {% endblock %}
 {% block content %}
@@ -52,6 +53,37 @@
               });
            }
         });
+        $( "#supplier" ).autocomplete({
+          minLength: 3,
+          select: function (event, ui) {
+            $("#supplier-id").val(ui.item.pid);
+            $("#supplier").val(ui.item.value);
+            return false;
+          },
+          source:function(request, response){
+            $.ajax({
+                url: "/admin/product/supplier-autocomplete/?term=" + $("#supplier").val(),
+                type: "GET",
+                success: function (res) {
+                    if (res.success){
+                        if (res.data){
+                            var results = [];
+                            var data = res.data;
+                            $.each(data, function(i, item) {
+                                var itemToAdd = {
+                                    pid : item.id,
+                                    value : item.name
+                                };
+                                results.push(itemToAdd);
+                            });
+                            response(results);
+                        }
+                    }
+
+                }
+              });
+           }
+        });
   } );
 
 </script>
@@ -68,10 +100,23 @@
                         <input type="hidden" id="product-id" name="product_id"/>
                     </div>
                 </td>
-            </tr>
-            <tr>
                 <td><label for="hsn_code">HSN Code</label></td>
                 <td><input type="text" id="hsn_code" name="hsn_code"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="supplier">Supplier</label></td>
+                <td>
+                    <div class="ui-widget" style="width:300px;">
+                        <input id="supplier" type="text" name="supplier" placeholder="type here...">
+                        <input type="hidden" id="supplier-id" name="supplier_id"/>
+                    </div>
+                </td>
+                <td><label for="po_num">PO Number</label></td>
+                <td><input type="text" id="po_num" name="po_num"/></td>
+            </tr>
+            <tr>
+
             </tr>
             <tr>
                 <td><label for="quantity">Quantity</label></td>
