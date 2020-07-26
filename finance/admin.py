@@ -29,7 +29,7 @@ class PaymentLedgerAdmin(BaseAdmin):
         else:
             query_model = Supplier
         client = query_model.objects.get(id=obj.client_id)
-        return f"{client.name} ({client.beat})"
+        return f"{client.name}"
 
     def lookup_allowed(self, lookup, value):
         """Override the default changelist view

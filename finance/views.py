@@ -6,6 +6,7 @@ from .models import PaymentLedger
 from .forms import PaymentDetailForm, PaymentLedgerSearchForm
 from catalogue.models import Supplier
 from client.models import Shop
+from order.models import Order
 
 
 class SupplierPaymentView(BaseAdminViews):
@@ -52,14 +53,28 @@ class ShopPaymentView(BaseAdminViews):
         if not supplier_id:
             messages.error(request, "Suppler not found in system with ID: %s" % supplier_id)
             return self.render_to_response(self.get_context_data())
-
+        amount = Decimal(amount)
         shop = Shop.objects.get(id=supplier_id)
         PaymentLedger.objects.create(client_id=shop.id, client_type=PaymentLedger.SHOP,
                                      paid_amount=amount,
                                      # paid_at=paid_at,
                                      payment_mode=mode)
         # decreasing shop outstanding balance
-        shop.outstanding_balance -= Decimal(amount)
+        shop.outstanding_balance -= amount
+        orders = Order.objects.filter(customer=shop, outstanding_amount__gt=Decimal(0))\
+            .order_by('id')
+        import ipdb;ipdb.set_trace()
+        for o in orders:
+            if amount <= 0:
+                break
+            if amount >= o.outstanding_amount:
+                amount -= o.outstanding_amount
+                o.outstanding_amount = Decimal(0)
+            else:
+                o.outstanding_amount -= amount
+                amount = Decimal(0)
+            o.save()
+
         shop.save()
         messages.success(request, "Payment detail Updated, Final outstanding Balance for %s is %s"
                          % (shop.name, shop.outstanding_balance))
