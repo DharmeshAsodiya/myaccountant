@@ -17,7 +17,6 @@ class SupplierPaymentView(BaseAdminViews):
         return {"form": PaymentDetailForm()}
 
     def post(self, request):
-        import ipdb;ipdb.set_trace()
         supplier_id = request.POST.get("client_id")
         amount = request.POST.get("paid_amount")
         paid_at = request.POST.get("payment_date")
