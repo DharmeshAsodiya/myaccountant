@@ -9,6 +9,9 @@
                 <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
                     <a href="order-create/">Create Order</a>
                 </li>
+                <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                    <a href="sales-report/">Sales Report</a>
+                </li>
 
             </ul>
         {% endfor %}

@@ -26,7 +26,13 @@ class OrderCreateView(BaseAdminViews):
         request_type = request.POST.get("submit_type")
         order_service = OrderCreator(shop_id, product_list, quantity_list, price_list)
         if request_type == "create-order":
-            order_id = order_service.create_order()
+            try:
+                order_id = order_service.create_order()
+            except Exception as e:
+                messages.error(request,
+                                 mark_safe("Order creation failed !!! %s" % e))
+                return self.render_to_response(self.get_context_data())
+
             messages.success(request,
                              mark_safe("Order created successfully, "
                                        "<a href=/admin/order/display-invoice/?id=%s>"

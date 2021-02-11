@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'myaccountant.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL", "postgres://postgres:@127.0.0.1:5432/myacc")}
+DATABASES = {"default": env.db("DATABASE_URL", "postgres://postgres:@127.0.0.1:5432/myaccountant")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Password validation

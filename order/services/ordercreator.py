@@ -92,42 +92,22 @@ class OrderCreator(object):
             product = Product.objects.get(id=item["product_id"])
             quantity = item["qty"]
             price = item["price"]
+            try:
+                stock = Stock.objects.get(product=product)
+                stock.quantity -= quantity
+                if stock.quantity < 0:
+                    self.order.delete()
+                    raise Exception("Requested quantity not available for Product ID: %s" % product.id)
+                stock.save()
+            except Stock.DoesNotExist:
+                self.order.delete()
+                raise Exception("Stock not added for Product ID: %s" % product.id)
             OrderItem.objects.create(order=self.order, product=product,
                                      quantity=quantity, mrp=price)
-            stock = Stock.objects.get(product=product)
-            stock.quantity -= quantity
-            stock.save()
+
         details = self.get_invoice_data()
         self.order.invoice_details = json.dumps(details)
         self.order.sub_total = self.total_payable
         self.order.outstanding_amount = self.total_payable
         self.order.save()
-        # self.invoice = Invoice.objects.create(order=self.order,
-        #                                       sub_total=self.total_payable,
-        #                                       outstanding_amount=self.total_payable,
-        #                                       invoice_details=json.dumps(details))
         return self.order.id
-
-def get_invoice_details(start_date, end_date):
-    import json
-    orders = Order.objects.filter(created_on__gte=start_date,
-                                  created_on__lt=end_date).order_by("id")
-    print("INV NO, DATE, GST NO, TAXABLE VALUE, SGST 2.5%, CGST 2.5%, SGST 6%, CGST 6%, TOTAL")
-    for o in orders:
-        data = json.loads(o.invoice_details)
-        tax = 0
-        value = 0
-        tax_5 = data["tax_details"].get("2.5", [0])[0]
-        tax_12 = data["tax_details"].get("6.0", [0])[0]
-        for key, val in data["tax_details"].items():
-            tax += float(key)
-            value += float(val[1])
-        print(
-            f"{data['invoice_no']}, {data['invoice_date']}, {data.get('shop_gst', '')}, {value}, {tax_5}, "
-            f"{tax_5}, {tax_12}, {tax_12}, {data['sub_total']}")
-
-get_invoice_details("2020-07-01", "2020-08-01")
-
-get_invoice_details("2020-08-01", "2020-09-01")
-
-get_invoice_details("2020-09-01", "2020-10-01")
